@@ -1,0 +1,10 @@
+item_id,item_name,category,description,available_in,price_dkk,price_pln
+M01,Classic hot dog,food,Grilled sausage in a bun with generous ketchup and mustard,both,45,16
+M02,Chili cheese dog,food,Sausage with chili sauce and melted cheese,both,52,21
+M03,Vegan dog,food,Plant-based sausage in a bun with mustard,both,49,19
+M04,Red sausage,food,"Danish classic: boiled bright-red sausage, bread on the side",Copenhagen,38,
+M05,Zapiekanka,food,"Polish classic: toasted open baguette with mushrooms, cheese and ketchup",Warsaw,,18
+M06,Fries,food,Fries with ketchup,both,30,12
+M07,Soda,drink,Can of soda,both,25,9
+M08,Coffee,drink,Cup of filter coffee,both,28,10
+M09,Chocolate milk,drink,Cold chocolate milk,both,22,8

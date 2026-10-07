@@ -1,0 +1,99 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Frankly Delicious - Board Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{--bg:#faf6ef;--card:#fff;--ink:#2b2118;--mut:#7a6c5d;--line:#eadfce;--cph:#1f5f8b;--war:#e0701a;--bad:#c0392b;--good:#2e8b57;--must:#e8b923}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{background:var(--ink);color:#fff;padding:26px 32px 22px;border-bottom:6px solid var(--must)}
+header h1{margin:0;font-size:26px;letter-spacing:.3px}header p{margin:4px 0 0;color:#d9cdbb}
+main{max-width:1280px;margin:0 auto;padding:22px 20px 40px}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:1.5px;color:var(--mut);margin:30px 0 12px;display:flex;align-items:center;gap:10px}
+h2 span.q{background:var(--ink);color:#fff;border-radius:50%;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;font-size:13px;letter-spacing:0}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;border-top:4px solid var(--must)}
+.kpi.bad{border-top-color:var(--bad)}.kpi.good{border-top-color:var(--good)}
+.kpi .l{font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.8px}.kpi .v{font-size:28px;font-weight:700;margin:2px 0}.kpi .d{font-size:13px;color:var(--mut)}
+.d b.up{color:var(--good)}.d b.dn{color:var(--bad)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(560px,100%),1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px 14px}
+.card h3{margin:0 0 2px;font-size:16px}.card .sub{color:var(--mut);font-size:13px;margin:0 0 10px}
+.card .so{margin:10px 0 0;padding:8px 12px;background:#fbf3df;border-left:4px solid var(--must);border-radius:4px;font-size:13.5px}
+.so.red{background:#fbe9e6;border-color:var(--bad)}.so.grn{background:#e6f3ea;border-color:var(--good)}
+.cv{position:relative;height:290px}
+footer{color:var(--mut);font-size:12.5px;margin-top:26px}
+</style></head><body>
+<header><h1>Frankly Delicious - how are we really doing?</h1><p>Jan 2024 - Dec 2025 | 8 stands, Copenhagen &amp; Warsaw | all money in EUR (daily FX) unless noted</p></header>
+<main>
+<h2><span class="q">1</span>How is the business really doing?</h2>
+<div class="kpis" id="kpis"></div>
+<div class="grid" style="margin-top:16px">
+<div class="card"><h3>Revenue is up, profit barely moves</h3><p class="sub">Monthly revenue by stand, EUR</p><div class="cv"><canvas id="c1"></canvas></div>
+<div class="so">2025 revenue +10.0%, but gross profit only +4.2%. W4 (new riverside stand) adds EUR 196k; same-store growth excl. W4 is just +2.8%.</div></div>
+<div class="card"><h3>Same-store growth 2025 vs 2024</h3><p class="sub">Revenue change in local currency, existing stands</p><div class="cv"><canvas id="c6"></canvas></div>
+<div class="so">C4 is the only Copenhagen stand shrinking. W3 is down because Warsaw had 19 home matches vs 24 (per-match takings are unchanged).</div></div>
+</div>
+<h2><span class="q">2</span>What should we worry about?</h2>
+<div class="grid">
+<div class="card"><h3>Warsaw gross margin collapsed Apr-Nov 2025</h3><p class="sub">Gross margin % by city (lines) and Warsaw sausage price, PLN/kg (bars)</p><div class="cv"><canvas id="c2"></canvas></div>
+<div class="so red">Warsaw sausage cost went from ~15 to ~66 PLN/kg in April 2025 and only normalised in Nov. Margin fell from 74% to 63%: about EUR 88k of extra cost. Copenhagen also drifts down ~0.5pt a year because prices were never raised.</div></div>
+<div class="card"><h3>C4 Christianshavn: cash is vanishing</h3><p class="sub">Card share of units by Copenhagen stand, %</p><div class="cv"><canvas id="c3"></canvas></div>
+<div class="so red">Since the new manager started (Mar 2025) C4 card sales are unchanged vs sister stands but cash sales fell ~55%, so card share jumped from 70% to 85%. Estimated unrecorded cash: EUR 50-62k in 10 months. Logbook: "Cash drawer sticky again. Will sort it out myself." (10 times). Needs an audit.</div></div>
+<div class="card"><h3>Rain kills uncovered stands</h3><p class="sub">Daily revenue vs a dry day of the same stand, month and weekday (index, dry = 100)</p><div class="cv"><canvas id="c5"></canvas></div>
+<div class="so red">On days with 2+ mm of rain, open-air stands sell ~40% less; the covered station stands lose ~5%. Rain days at open-air stands cost roughly EUR 270k of sales over two years.</div></div>
+<div class="card"><h3>Stadium stands live off ~14% of days</h3><p class="sub">Average daily revenue, EUR</p><div class="cv"><canvas id="c7"></canvas></div>
+<div class="so">C3 and W3 earn ~EUR 150 on a normal day and ~EUR 650 on event days; concerts bring ~EUR 1,900. Christmas markets and marathons: nothing. They earn only ~6% of revenue, so check whether staffing a full week is worth it.</div></div>
+</div>
+<h2><span class="q">3</span>What should we do more of?</h2>
+<div class="grid">
+<div class="card"><h3>Vegan dog is the growth engine</h3><p class="sub">Copenhagen units sold per month</p><div class="cv"><canvas id="c4"></canvas></div>
+<div class="so grn">Vegan units +92% in Copenhagen and +87% in Warsaw (2025 vs 2024), now 14% / 7% of units. It eats the red sausage (-36%) and some classic dogs, and gross profit per vegan dog (EUR 4.4) beats the red sausage (EUR 3.4). Push it, and rethink the red sausage.</div></div>
+<div class="card"><h3>The new seasonal stand W4 pays off</h3><p class="sub">Warsaw W4 vs W1: avg daily revenue by month 2025, EUR</p><div class="cv"><canvas id="c9"></canvas></div>
+<div class="so grn">W4 opened May 2025 and took EUR 196k in 5 months (EUR 1,279/day, gross margin 64% hit by the sausage spike) without hurting W1 (+3.6% May-Sep). Test an April/October season.</div></div>
+<div class="card"><h3>Right stand, right day</h3><p class="sub">Avg daily revenue on non-event days by weekday and stand type, EUR</p><div class="cv"><canvas id="c8"></canvas></div>
+<div class="so grn">Commuter stands (stations) earn ~EUR 2,050 Mon-Thu but fall 40-50% at weekends; tourist squares gain ~50% on Saturday and the seasonal stand W4 doubles. Staff and stock accordingly; Christmas markets lift C1/W1 by +12%/+22% and cause chocolate milk and coffee to double their share.</div></div>
+</div>
+<footer>Method: sales converted to EUR with the daily rate; margin = (revenue - cost_of_goods)/revenue. Day-level indices compare each stand-day to a dry, event-free day of the same month and weekday. Synthetic data. See findings.md for caveats.</footer>
+</main>
+<script>
+const D={"months": ["2024-01", "2024-02", "2024-03", "2024-04", "2024-05", "2024-06", "2024-07", "2024-08", "2024-09", "2024-10", "2024-11", "2024-12", "2025-01", "2025-02", "2025-03", "2025-04", "2025-05", "2025-06", "2025-07", "2025-08", "2025-09", "2025-10", "2025-11", "2025-12"], "rev_stand": {"C1": [32151.0, 27473.0, 37420.0, 38809.0, 47358.0, 47736.0, 45660.0, 51168.0, 42894.0, 38594.0, 35419.0, 42721.0, 35572.0, 34837.0, 41992.0, 39687.0, 41979.0, 47337.0, 51185.0, 51902.0, 46858.0, 44544.0, 43259.0, 44050.0], "C2": [46795.0, 46182.0, 47600.0, 50635.0, 54798.0, 52681.0, 56787.0, 55824.0, 53558.0, 54090.0, 48523.0, 48208.0, 50923.0, 47186.0, 50721.0, 52892.0, 55441.0, 53741.0, 59121.0, 56083.0, 56157.0, 56991.0, 50903.0, 53390.0], "C3": [3900.0, 3929.0, 7920.0, 7198.0, 8430.0, 7252.0, 7411.0, 8963.0, 7684.0, 6219.0, 4471.0, 4432.0, 4066.0, 6055.0, 6132.0, 7343.0, 9145.0, 7227.0, 9942.0, 11048.0, 6277.0, 8543.0, 7174.0, 3787.0], "C4": [23241.0, 22516.0, 28917.0, 30121.0, 35324.0, 38665.0, 34036.0, 40112.0, 32179.0, 28984.0, 24756.0, 25047.0, 26478.0, 26036.0, 26151.0, 25483.0, 28139.0, 30094.0, 33131.0, 33355.0, 30747.0, 29378.0, 25054.0, 22856.0], "W1": [25053.0, 25552.0, 31441.0, 32998.0, 41227.0, 39235.0, 40094.0, 45781.0, 34155.0, 35295.0, 32504.0, 34826.0, 25904.0, 24806.0, 28932.0, 31862.0, 41521.0, 42763.0, 41795.0, 45767.0, 39550.0, 36107.0, 32754.0, 37077.0], "W2": [52532.0, 48843.0, 52850.0, 55958.0, 59792.0, 57929.0, 61066.0, 60843.0, 57229.0, 57128.0, 51070.0, 49871.0, 52846.0, 48565.0, 53286.0, 55093.0, 61254.0, 60418.0, 63381.0, 62463.0, 61693.0, 61567.0, 54091.0, 54688.0], "W3": [3211.0, 4864.0, 5309.0, 6184.0, 8872.0, 6555.0, 6617.0, 12335.0, 7497.0, 6276.0, 6275.0, 3411.0, 3080.0, 3640.0, 5265.0, 5434.0, 7290.0, 6097.0, 8404.0, 9114.0, 8566.0, 6699.0, 4569.0, 4213.0], "W4": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 36707.0, 40516.0, 38614.0, 42137.0, 37712.0, null, null, null]}, "gm": {"Copenhagen": [75.48, 75.42, 75.34, 75.09, 75.1, 74.84, 74.75, 74.74, 74.63, 74.69, 74.74, 74.7, 74.3, 74.19, 73.83, 73.59, 73.55, 73.24, 73.19, 73.36, 73.2, 72.95, 73.05, 73.04], "Warsaw": [74.84, 74.87, 74.77, 74.51, 74.31, 73.96, 73.84, 73.61, 73.65, 74.05, 74.13, 74.43, 74.39, 74.25, 74.06, 65.06, 63.2, 62.89, 63.36, 65.02, 66.72, 68.25, 72.64, 72.89]}, "sausage": {"Copenhagen": [75.3, 74.9, 74.6, 75.0, 74.5, 75.3, 75.8, 76.2, 76.3, 75.7, 76.7, 77.2, 79.0, 79.1, 80.8, 81.1, 80.1, 80.6, 79.5, 78.0, 78.5, 79.9, 80.3, 80.5], "Warsaw": [28.1, 28.1, 27.9, 28.0, 27.6, 27.4, 27.5, 27.7, 27.7, 26.7, 26.7, 26.3, 26.2, 26.2, 26.1, 26.3, 26.3, 26.5, 26.5, 26.6, 26.7, 27.2, 27.9, 27.8]}, "excess_by_month": null, "card": {"C1": [67.7, 69.2, 68.8, 68.7, 68.9, 69.1, 69.3, 69.8, 70.2, 69.9, 70.7, 71.9, 71.1, 71.8, 71.5, 71.5, 70.9, 72.1, 72.4, 73.2, 73.0, 74.2, 73.5, 73.5], "C2": [68.0, 68.1, 68.5, 68.8, 69.3, 69.1, 68.8, 69.6, 70.0, 70.6, 70.6, 71.2, 70.9, 71.0, 72.2, 71.1, 72.5, 71.8, 73.2, 72.9, 73.6, 73.8, 73.9, 74.9], "C3": [67.1, 64.8, 68.9, 67.4, 69.4, 70.0, 69.7, 68.2, 69.8, 69.8, 69.4, 72.0, 69.5, 73.0, 70.8, 74.1, 74.4, 71.3, 71.6, 72.0, 73.8, 72.2, 74.1, 75.6], "C4": [67.7, 69.1, 68.4, 68.8, 70.0, 69.4, 69.7, 69.4, 70.5, 69.8, 72.0, 69.8, 72.3, 71.6, 84.9, 84.8, 85.3, 85.8, 85.4, 86.3, 85.1, 85.1, 85.6, 86.0]}, "cph_items": {"Vegan dog": [876.0, 983.0, 1347.0, 1468.0, 1885.0, 2013.0, 2153.0, 2492.0, 2315.0, 2411.0, 2064.0, 2264.0, 2423.0, 2550.0, 2866.0, 2953.0, 3453.0, 3670.0, 4321.0, 4279.0, 4074.0, 4301.0, 3917.0, 3857.0], "Red sausage": [3407.0, 3106.0, 3503.0, 3632.0, 4050.0, 3926.0, 3892.0, 4030.0, 3280.0, 2952.0, 2456.0, 2473.0, 2571.0, 2340.0, 2439.0, 2355.0, 2314.0, 2398.0, 2515.0, 2273.0, 2013.0, 1808.0, 1546.0, 1396.0], "Classic hot dog": [5572.0, 5243.0, 6267.0, 6552.0, 7385.0, 7507.0, 7105.0, 7721.0, 6809.0, 6327.0, 5462.0, 5405.0, 5644.0, 5374.0, 5928.0, 5937.0, 6334.0, 6348.0, 6981.0, 7039.0, 6395.0, 6443.0, 5543.0, 5172.0]}, "rain": {"labels": ["Dry", "0-2 mm", "2-5 mm", "5-10 mm", "10+ mm"], "no": [100.0, 89.0, 59.0, 58.0, 59.0], "yes": [100.0, 101.0, 95.0, 96.0, 95.0]}, "lfl": {"labels": ["City Hall Square (C1)", "Norreport Station (C2)", "Stadium Gate (C3)", "Christianshavn Canal (C4)", "Old Town Square (W1)", "Central Station (W2)", "National Stadium (W3)"], "vals": [7.3, 4.5, 11.5, -7.4, 1.4, 2.7, -7.6]}, "stadium": {"C3": {"ev": 668, "non": 157, "share": 40.6, "evdays": 100}, "W3": {"ev": 632, "non": 132, "share": 45.6, "evdays": 108}}, "stad_by_type": {"Christmas market": 116, "Concert": 1902, "Football match": 1300, "Marathon": 168, "none": 145}, "dow": {"classic": [983.0, 1012.0, 1013.0, 1070.0, 1293.0, 1515.0, 1325.0], "commuter": [2071.0, 2103.0, 2065.0, 2076.0, 2004.0, 1252.0, 1004.0], "seasonal": [884.0, 997.0, 927.0, 1084.0, 1362.0, 1957.0, 1690.0], "stadium": [139.0, 148.0, 147.0, 142.0, 146.0, 149.0, 143.0]}, "kpi": {"2024": {"rev": 2705466.4938325663, "gp": 2018943.523002843, "units": 668230, "Copenhagen": {"rev": 1544789.6212587226, "gm": 0.7493829469940152}, "Warsaw": {"rev": 1160676.872573844, "gm": 0.7420708937089775}}, "2025": {"rev": 2976630.64038134, "gp": 2103943.8174362862, "units": 735495, "Copenhagen": {"rev": 1590392.4804649218, "gm": 0.7343303363667844}, "Warsaw": {"rev": 1386238.1599164184, "gm": 0.6752594174421764}}}, "excess_eur": 87856.5528762026, "c4_missing_eur": 62453.11285650593};
+const CPH='#1f5f8b',WAR='#e0701a',BAD='#c0392b',GOOD='#2e8b57',MUST='#e8b923',GREY='#8c8c8c';
+Chart.defaults.font.family='system-ui,sans-serif';Chart.defaults.color='#6b5d4f';
+const lab=D.months.map(m=>{const[y,mo]=m.split('-');return['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][mo-1]+' '+y.slice(2)});
+const fmtK=v=>v>=1000?(v/1000).toFixed(0)+'k':v;
+const base={responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:12,usePointStyle:true}}},scales:{x:{grid:{display:false},ticks:{maxRotation:0,autoSkip:true,maxTicksLimit:12}}}};
+const merge=(o,p)=>JSON.parse(JSON.stringify(o)),clone=o=>JSON.parse(JSON.stringify(o));
+// KPIs
+const k=D.kpi,r4=a=>a.toFixed(1);
+const pct=(a,b)=>((a/b-1)*100);
+const cls=(v)=>v>=0?'up':'dn';
+const kp=[
+['Revenue 2025','EUR '+(k[2025].rev/1e6).toFixed(2)+'M',pct(k[2025].rev,k[2024].rev),'vs 2024','good'],
+['Gross profit 2025','EUR '+(k[2025].gp/1e6).toFixed(2)+'M',pct(k[2025].gp,k[2024].gp),'vs 2024','bad'],
+['Gross margin','70.7%',null,'down from 74.6% in 2024 (-3.9 pts)','bad'],
+['Warsaw margin','67.5%',null,'74.2% in 2024; trough 63% mid-2025','bad'],
+['Same-store growth','+2.8%',null,'excl. new W4 stand; +4.4% excl. C4 too','']
+];
+document.getElementById('kpis').innerHTML=kp.map(x=>`<div class="kpi ${x[4]}"><div class="l">${x[0]}</div><div class="v">${x[1]}</div><div class="d">${x[2]!==null?`<b class="${cls(x[2])}">${x[2]>=0?'+':''}${x[2].toFixed(1)}%</b> `:''}${x[3]}</div></div>`).join('')+`<div class="kpi bad"><div class="l">Leakage at risk</div><div class="v">~EUR 150k</div><div class="d">Warsaw sausage spike EUR 88k + C4 missing cash EUR ~50-62k</div></div>`;
+// c1 stacked rev
+const cols={C1:'#1f5f8b',C2:'#5b9bc4',C3:'#a9cce3',C4:'#0d3552',W1:'#e0701a',W2:'#f0a35e',W3:'#f7cfa4',W4:'#a84b00'};
+new Chart('c1',{type:'bar',data:{labels:lab,datasets:Object.keys(D.rev_stand).map(s=>({label:s,data:D.rev_stand[s],backgroundColor:cols[s],stack:'a'}))},options:{...base,scales:{x:{...base.scales.x,stacked:true},y:{stacked:true,ticks:{callback:fmtK},grid:{color:'#f0e8da'}}}}});
+// c6 lfl
+new Chart('c6',{type:'bar',data:{labels:D.lfl.labels,datasets:[{data:D.lfl.vals,backgroundColor:D.lfl.vals.map(v=>v<0?BAD:GOOD)}]},options:{...base,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:'#f0e8da'},ticks:{callback:v=>v+'%'}},y:{grid:{display:false}}}}});
+// c2
+new Chart('c2',{data:{labels:lab,datasets:[{type:'bar',label:'Warsaw sausage price (PLN/kg, right)',data:D.sausage.Warsaw,backgroundColor:'rgba(224,112,26,.25)',yAxisID:'y2',order:3},{type:'line',label:'Copenhagen margin %',data:D.gm.Copenhagen,borderColor:CPH,backgroundColor:CPH,tension:.25,yAxisID:'y',pointRadius:2},{type:'line',label:'Warsaw margin %',data:D.gm.Warsaw,borderColor:WAR,backgroundColor:WAR,tension:.25,yAxisID:'y',pointRadius:2}]},options:{...base,scales:{x:base.scales.x,y:{min:55,max:80,ticks:{callback:v=>v+'%'},grid:{color:'#f0e8da'}},y2:{position:'right',min:0,max:80,grid:{display:false}}}}});
+// c3
+const cc={C1:CPH,C2:'#5b9bc4',C3:'#a9cce3',C4:BAD};
+new Chart('c3',{type:'line',data:{labels:lab,datasets:Object.keys(D.card).map(s=>({label:s,data:D.card[s],borderColor:cc[s],backgroundColor:cc[s],borderWidth:s=='C4'?3.5:1.8,pointRadius:s=='C4'?3:0,tension:.2}))},options:{...base,scales:{x:base.scales.x,y:{min:60,max:90,ticks:{callback:v=>v+'%'},grid:{color:'#f0e8da'}}}}});
+// c5
+new Chart('c5',{type:'bar',data:{labels:D.rain.labels,datasets:[{label:'Open-air stands',data:D.rain.no,backgroundColor:BAD},{label:'Covered (station) stands',data:D.rain.yes,backgroundColor:GOOD}]},options:{...base,scales:{x:base.scales.x,y:{min:0,max:110,ticks:{callback:v=>v},grid:{color:'#f0e8da'}}}}});
+// c7
+const sd=D.stadium;
+new Chart('c7',{type:'bar',data:{labels:['Copenhagen C3','Warsaw W3'],datasets:[{label:'Normal day',data:[sd.C3.non,sd.W3.non],backgroundColor:GREY},{label:'Match / concert / marathon day (avg)',data:[sd.C3.ev,sd.W3.ev],backgroundColor:MUST},{label:'Concert day',data:[1971,1704],backgroundColor:GOOD}]},options:{...base,scales:{x:base.scales.x,y:{grid:{color:'#f0e8da'}}}}});
+// c4
+new Chart('c4',{type:'line',data:{labels:lab,datasets:[{label:'Vegan dog',data:D.cph_items['Vegan dog'],borderColor:GOOD,backgroundColor:GOOD,tension:.25,pointRadius:2},{label:'Red sausage',data:D.cph_items['Red sausage'],borderColor:BAD,backgroundColor:BAD,tension:.25,pointRadius:2},{label:'Classic hot dog',data:D.cph_items['Classic hot dog'],borderColor:GREY,backgroundColor:GREY,tension:.25,pointRadius:2,borderDash:[5,4]}]},options:{...base,scales:{x:base.scales.x,y:{grid:{color:'#f0e8da'}}}}});
+// c9
+new Chart('c9',{type:'bar',data:{labels:['May','Jun','Jul','Aug','Sep'],datasets:[{label:'W4 Riverside (new, seasonal)',data:[1184, 1351, 1246, 1359, 1257],backgroundColor:'#a84b00'},{label:'W1 Old Town',data:[1339, 1425, 1348, 1476, 1318],backgroundColor:'#f0a35e'}]},options:{...base,scales:{x:base.scales.x,y:{grid:{color:'#f0e8da'}}}}});
+// c8
+const dn=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],tc={classic:CPH,commuter:BAD,seasonal:WAR,stadium:GREY};
+new Chart('c8',{type:'line',data:{labels:dn,datasets:Object.keys(D.dow).map(t=>({label:t,data:D.dow[t],borderColor:tc[t],backgroundColor:tc[t],tension:.25,borderWidth:2.5}))},options:{...base,scales:{x:base.scales.x,y:{grid:{color:'#f0e8da'}}}}});
+</script></body></html>

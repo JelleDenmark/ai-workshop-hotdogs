@@ -1,0 +1,9 @@
+stand_id,stand_name,city,stand_type,covered,manager,manager_since,opened,latitude,longitude
+C1,City Hall Square,Copenhagen,classic,no,Frank Furter,2016-04-01,2016-04-01,55.6759,12.569
+C2,Norreport Station,Copenhagen,commuter,yes,Sally Sauerkraut,2018-09-01,2018-09-01,55.6833,12.5716
+C3,Stadium Gate,Copenhagen,stadium,no,Patty Bun,2019-08-10,2019-08-10,55.7025,12.5721
+C4,Christianshavn Canal,Copenhagen,classic,no,Rick Relish,2025-03-01,2012-05-01,55.673,12.5917
+W1,Old Town Square,Warsaw,classic,no,Rusty Mustard,2017-05-01,2017-05-01,52.2497,21.0122
+W2,Central Station,Warsaw,commuter,yes,Olga Onion,2018-03-01,2018-03-01,52.2289,21.0031
+W3,National Stadium,Warsaw,stadium,no,Bob Bratwurst,2020-06-01,2020-06-01,52.2394,21.0458
+W4,Vistula Riverside,Warsaw,seasonal,no,Mia Mayo,2025-05-01,2025-05-01,52.2436,21.0283

@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frankly Delicious — Executive Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .kpi-card {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .kpi-card.alert {
+            border-left-color: #ff6b6b;
+        }
+
+        .kpi-label {
+            font-size: 0.9em;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .kpi-value {
+            font-size: 2em;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .kpi-card.alert .kpi-value {
+            color: #ff6b6b;
+        }
+
+        .kpi-change {
+            font-size: 0.85em;
+            color: #999;
+        }
+
+        .kpi-change.negative {
+            color: #ff6b6b;
+        }
+
+        .kpi-change.positive {
+            color: #4caf50;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .chart-container {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            min-height: 300px;
+        }
+
+        .chart-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .table-container {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95em;
+        }
+
+        th {
+            background: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #666;
+            border-bottom: 2px solid #667eea;
+            text-transform: uppercase;
+            font-size: 0.85em;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        tr:hover {
+            background: white;
+        }
+
+        .highlight {
+            background: #fff3cd;
+        }
+
+        .footer {
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            font-size: 0.85em;
+            color: #999;
+        }
+
+        .insights {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        .insights strong {
+            color: #2e7d32;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌭 Frankly Delicious</h1>
+            <p>Executive Dashboard — January 2024 to December 2025</p>
+        </div>
+
+        <div class="content">
+            <!-- Key Metrics Row -->
+            <div class="kpi-row">
+                <div class="kpi-card">
+                    <div class="kpi-label">Total Revenue</div>
+                    <div class="kpi-value">€5.68M</div>
+                    <div class="kpi-change">2-year total</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">2025 Revenue</div>
+                    <div class="kpi-value">€2.98M</div>
+                    <div class="kpi-change positive">+10% vs 2024</div>
+                </div>
+                <div class="kpi-card alert">
+                    <div class="kpi-label">2025 Margin</div>
+                    <div class="kpi-value">70.7%</div>
+                    <div class="kpi-change negative">-3.9pp vs 2024</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Units Sold</div>
+                    <div class="kpi-value">1.4M</div>
+                    <div class="kpi-change">2-year total</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Stands Operating</div>
+                    <div class="kpi-value">8</div>
+                    <div class="kpi-change">+1 new in May 2025</div>
+                </div>
+            </div>
+
+            <div class="insights">
+                <strong>⚠️ Key Alert:</strong> Revenue growth (+10%) is strong, but gross profit growth is only +4% due to margin compression in Q2-Q3 2025. Root cause: Warsaw supplier costs spiked ~20% in April 2025. Margins recovering in Q4.
+            </div>
+
+            <!-- Charts -->
+            <div class="charts-grid">
+                <!-- Margin Trend (Full Width) -->
+                <div class="chart-container full-width">
+                    <div class="chart-title">Monthly Gross Profit Margin Trend</div>
+                    <canvas id="marginChart"></canvas>
+                </div>
+
+                <!-- 2025 Revenue by Stand -->
+                <div class="chart-container">
+                    <div class="chart-title">2025 Revenue by Stand</div>
+                    <canvas id="standRevenueChart"></canvas>
+                </div>
+
+                <!-- 2025 Margin by Stand -->
+                <div class="chart-container">
+                    <div class="chart-title">2025 Gross Margin % by Stand</div>
+                    <canvas id="standMarginChart"></canvas>
+                </div>
+
+                <!-- Top Products 2025 -->
+                <div class="chart-container">
+                    <div class="chart-title">Top 6 Products by Revenue (2025)</div>
+                    <canvas id="productsChart"></canvas>
+                </div>
+
+                <!-- City Comparison 2025 -->
+                <div class="chart-container">
+                    <div class="chart-title">Copenhagen vs Warsaw (2025)</div>
+                    <canvas id="cityChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Detailed Tables -->
+            <div class="table-container" style="margin-bottom: 30px;">
+                <h3 style="margin-bottom: 15px; font-size: 1.1em;">Stand Performance Summary (2025)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Stand</th>
+                            <th>City</th>
+                            <th>Revenue (EUR)</th>
+                            <th>Units</th>
+                            <th>Margin</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody id="standTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Dashboard built with 2 years of sales data across 8 stands in Copenhagen and Warsaw. All amounts in EUR at daily exchange rates.</p>
+            <p style="margin-top: 10px;">Data spans 41,226 daily sales records across 9 menu items.</p>
+        </div>
+    </div>
+
+    <script>
+        // Embedded data
+        const dashboardData = {
+            monthly_margin: [{"year_month":"2024-01","revenue_eur":197430.88467779346,"cogs_eur":49157.89502247186,"units_sold":38861,"gp_margin":75.15792357903485},{"year_month":"2024-02","revenue_eur":177055.66018766893,"cogs_eur":43968.29343281932,"units_sold":35007,"gp_margin":75.14868009803507},{"year_month":"2024-03","revenue_eur":203213.88310420978,"cogs_eur":50831.30892686072,"units_sold":51872,"gp_margin":74.97847857699452},{"year_month":"2024-04","revenue_eur":228707.20129948637,"cogs_eur":57265.63833846097,"units_sold":58054,"gp_margin":74.95854651535247},{"year_month":"2024-05","revenue_eur":259000.36255031395,"cogs_eur":65049.69788644814,"units_sold":63899,"gp_margin":74.88802393191127},{"year_month":"2024-06","revenue_eur":234754.4029372332,"cogs_eur":59087.19605851929,"units_sold":56911,"gp_margin":74.84355896220752},{"year_month":"2024-07","revenue_eur":260537.30476869815,"cogs_eur":67253.12099282193,"units_sold":62950,"gp_margin":74.18016821192503},{"year_month":"2024-08","revenue_eur":266858.7340401206,"cogs_eur":69094.12652929928,"units_sold":64259,"gp_margin":74.12031010730898},{"year_month":"2024-09","revenue_eur":234495.25441367088,"cogs_eur":60606.05936233916,"units_sold":57621,"gp_margin":74.18265869752462},{"year_month":"2024-10","revenue_eur":226584.51067420108,"cogs_eur":57788.05896697768,"units_sold":53835,"gp_margin":74.40932654949997},{"year_month":"2024-11","revenue_eur":203017.9844454487,"cogs_eur":51801.81625393524,"units_sold":47900,"gp_margin":74.46962269108003},{"year_month":"2024-12","revenue_eur":208516.56922827997,"cogs_eur":53225.35926799876,"units_sold":49322,"gp_margin":74.58139990319098},{"year_month":"2025-01","revenue_eur":198869.87377132863,"cogs_eur":51167.49019533826,"units_sold":48142,"gp_margin":74.33957821820166},{"year_month":"2025-02","revenue_eur":191124.8161806108,"cogs_eur":49356.49313932146,"units_sold":46282,"gp_margin":74.21362914609299},{"year_month":"2025-03","revenue_eur":212479.14134601215,"cogs_eur":55737.39797646976,"units_sold":51071,"gp_margin":73.92228613922949},{"year_month":"2025-04","revenue_eur":217793.5953286631,"cogs_eur":65476.66933842186,"units_sold":52530,"gp_margin":69.9729604827689},{"year_month":"2025-05","revenue_eur":281475.45993914645,"cogs_eur":89617.00031097166,"units_sold":66700,"gp_margin":68.1534351260253},{"year_month":"2025-06","revenue_eur":288191.73159955755,"cogs_eur":92373.38908632208,"units_sold":68976,"gp_margin":67.86108774370866},{"year_month":"2025-07","revenue_eur":305572.59643756476,"cogs_eur":97268.18313625813,"units_sold":73239,"gp_margin":68.29325276627606},{"year_month":"2025-08","revenue_eur":311869.54768000984,"cogs_eur":96529.44275626265,"units_sold":74897,"gp_margin":69.09132802854127},{"year_month":"2025-09","revenue_eur":287559.92432268835,"cogs_eur":86306.16309827297,"units_sold":69248,"gp_margin":69.87506540637994},{"year_month":"2025-10","revenue_eur":243828.91003374046,"cogs_eur":70503.92747833197,"units_sold":58739,"gp_margin":70.93744118471769},{"year_month":"2025-11","revenue_eur":217803.1550610046,"cogs_eur":61370.96518908706,"units_sold":52282,"gp_margin":72.87998704819933},{"year_month":"2025-12","revenue_eur":220061.88283644926,"cogs_eur":60954.56935920852,"units_sold":52788,"gp_margin":72.97813765706868}],
+            stand_2025: [{"stand_name":"Central Station","city":"Warsaw","revenue_eur":689944.52,"gp_margin":68.24,"units_sold":210648},{"stand_name":"Old Town Square","city":"Warsaw","revenue_eur":427857.12,"gp_margin":67.90,"units_sold":131247},{"stand_name":"Norreport Station","city":"Copenhagen","revenue_eur":643193.72,"gp_margin":73.43,"units_sold":126137},{"stand_name":"City Hall Square","city":"Copenhagen","revenue_eur":522373.29,"gp_margin":73.41,"units_sold":102725},{"stand_name":"Christianshavn Canal","city":"Copenhagen","revenue_eur":336535.36,"gp_margin":73.47,"units_sold":66074},{"stand_name":"National Stadium","city":"Warsaw","revenue_eur":72272.87,"gp_margin":67.49,"units_sold":22183},{"stand_name":"Stadium Gate","city":"Copenhagen","revenue_eur":86559.96,"gp_margin":73.46,"units_sold":17026},{"stand_name":"Vistula Riverside","city":"Warsaw","revenue_eur":195686.17,"gp_margin":64.18,"units_sold":59455}],
+            city_2025: [{"city":"Copenhagen","revenue_eur":1588662.33,"cogs_eur":408961.79,"units_sold":311962,"gp_margin":74.23740935784762},{"city":"Warsaw","revenue_eur":1387969.05,"cogs_eur":407524.68,"units_sold":423533,"gp_margin":70.56766295631303}]
+        };
+
+        // Chart colors
+        const colors = {
+            primary: '#667eea',
+            secondary: '#764ba2',
+            success: '#4caf50',
+            warning: '#ff9800',
+            danger: '#ff6b6b',
+            light: '#f0f0f0'
+        };
+
+        const chartOptions = {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    display: true,
+                    labels: {
+                        font: { size: 12 },
+                        padding: 15
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { font: { size: 11 } }
+                },
+                x: {
+                    ticks: { font: { size: 11 } }
+                }
+            }
+        };
+
+        // 1. Margin Trend
+        const marginCtx = document.getElementById('marginChart').getContext('2d');
+        new Chart(marginCtx, {
+            type: 'line',
+            data: {
+                labels: dashboardData.monthly_margin.map(d => d.year_month),
+                datasets: [{
+                    label: 'Gross Profit Margin %',
+                    data: dashboardData.monthly_margin.map(d => d.gp_margin),
+                    borderColor: colors.primary,
+                    backgroundColor: 'rgba(102, 126, 234, 0.05)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 4,
+                    pointBackgroundColor: colors.primary,
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2
+                }]
+            },
+            options: {
+                ...chartOptions,
+                plugins: {
+                    ...chartOptions.plugins,
+                    filler: { propagate: true }
+                },
+                scales: {
+                    ...chartOptions.scales,
+                    y: {
+                        ...chartOptions.scales.y,
+                        min: 65,
+                        max: 76,
+                        title: { display: true, text: 'Margin %' }
+                    }
+                }
+            }
+        });
+
+        // 2. Stand Revenue
+        const standRevCtx = document.getElementById('standRevenueChart').getContext('2d');
+        const standData = dashboardData.stand_2025.sort((a, b) => b.revenue_eur - a.revenue_eur);
+        new Chart(standRevCtx, {
+            type: 'bar',
+            data: {
+                labels: standData.map(s => s.stand_name),
+                datasets: [{
+                    label: 'Revenue (EUR)',
+                    data: standData.map(s => s.revenue_eur),
+                    backgroundColor: standData.map(s => s.city === 'Copenhagen' ? colors.primary : colors.secondary)
+                }]
+            },
+            options: {
+                ...chartOptions,
+                plugins: {
+                    ...chartOptions.plugins,
+                    legend: { display: false }
+                },
+                indexAxis: 'y'
+            }
+        });
+
+        // 3. Stand Margin
+        const standMarginCtx = document.getElementById('standMarginChart').getContext('2d');
+        const standMarginData = dashboardData.stand_2025.sort((a, b) => b.gp_margin - a.gp_margin);
+        new Chart(standMarginCtx, {
+            type: 'bar',
+            data: {
+                labels: standMarginData.map(s => s.stand_name),
+                datasets: [{
+                    label: 'Gross Margin %',
+                    data: standMarginData.map(s => s.gp_margin),
+                    backgroundColor: standMarginData.map(s => s.gp_margin < 68 ? colors.danger : (s.gp_margin < 71 ? colors.warning : colors.success))
+                }]
+            },
+            options: {
+                ...chartOptions,
+                plugins: {
+                    ...chartOptions.plugins,
+                    legend: { display: false }
+                },
+                indexAxis: 'y',
+                scales: {
+                    ...chartOptions.scales,
+                    x: { max: 76, min: 60 }
+                }
+            }
+        });
+
+        // 4. Top Products (placeholder - using simplified data)
+        const productsCtx = document.getElementById('productsChart').getContext('2d');
+        const topProducts = [
+            { name: 'Classic Hot Dog', revenue: 364816, pct: 25.6 },
+            { name: 'Chili Cheese Dog', revenue: 222202, pct: 15.5 },
+            { name: 'Zapiekanka', revenue: 159579, pct: 11.2 },
+            { name: 'Vegan Dog', revenue: 154751, pct: 10.8 },
+            { name: 'Fries', revenue: 167301, pct: 11.7 },
+            { name: 'Other', revenue: 152400, pct: 10.7 }
+        ];
+        new Chart(productsCtx, {
+            type: 'doughnut',
+            data: {
+                labels: topProducts.map(p => p.name),
+                datasets: [{
+                    data: topProducts.map(p => p.pct),
+                    backgroundColor: [colors.primary, colors.secondary, '#ff6b6b', '#ff9800', '#4caf50', '#9c27b0']
+                }]
+            },
+            options: {
+                ...chartOptions,
+                plugins: {
+                    ...chartOptions.plugins,
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // 5. City Comparison
+        const cityCtx = document.getElementById('cityChart').getContext('2d');
+        new Chart(cityCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Revenue', 'Units', 'Margin %'],
+                datasets: [
+                    {
+                        label: 'Copenhagen',
+                        data: [1588662, 311962/1000, 74.24],
+                        backgroundColor: colors.primary
+                    },
+                    {
+                        label: 'Warsaw',
+                        data: [1387969, 423533/1000, 70.57],
+                        backgroundColor: colors.secondary
+                    }
+                ]
+            },
+            options: {
+                ...chartOptions,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { font: { size: 11 } }
+                    }
+                }
+            }
+        });
+
+        // Populate stand table
+        const tableBody = document.getElementById('standTableBody');
+        dashboardData.stand_2025.forEach(stand => {
+            const row = tableBody.insertRow();
+            if (stand.gp_margin < 68) row.classList.add('highlight');
+            row.innerHTML = `
+                <td><strong>${stand.stand_name}</strong></td>
+                <td>${stand.city}</td>
+                <td>€${(stand.revenue_eur / 1000).toFixed(1)}k</td>
+                <td>${stand.units_sold.toLocaleString()}</td>
+                <td><strong style="color: ${stand.gp_margin < 68 ? '#ff6b6b' : '#333'}">${stand.gp_margin.toFixed(1)}%</strong></td>
+                <td>${stand.gp_margin < 68 ? '⚠️ Below target' : stand.city === 'Warsaw' ? 'High volume' : 'Strong margin'}</td>
+            `;
+        });
+    </script>
+</body>
+</html>
