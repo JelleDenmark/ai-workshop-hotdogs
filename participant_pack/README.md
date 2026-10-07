@@ -20,6 +20,8 @@ At the end you get **3 minutes** to present:
 
 There are several hidden stories in the data. Some are easy to find and some are well hidden. Points are awarded at the end. 🏆
 
+> 📜 **Read `RULES.md` first.** Work only in your team folder, with web search turned off for the AI.
+>
 > The data is 100% synthetic, so you can paste it into any AI tool freely.
 > (With real company data, the normal rules apply!)
 
