@@ -13,8 +13,11 @@ All numbers below were verified against the generated data (seed 20261005). If y
 | 🔴 Hard finding | 3 |
 | 🪤 Trap avoided (and called out) | +2 |
 | 🪤 Fell into a trap | −1 (said with love) |
+| ⭐ Bonus: a valid finding that is not in this key | +1 each (facilitator's judgement; must be backed by numbers) |
 
-Suggested awards: **Sharpest insight**, **Prettiest dashboard**, **Best AI mistake caught**.
+Suggested awards: **The Golden Sausage** (sharpest insight), **Best Dressed Dog** (prettiest dashboard), **Ketchup on the Shirt** (best AI mistake caught).
+
+The key is not the ceiling. Real data has more stories than anyone plants, so reward pairs who find something true that isn't listed here. Known examples are under *Bonus findings* below.
 
 ---
 
@@ -82,10 +85,32 @@ Suggested awards: **Sharpest insight**, **Prettiest dashboard**, **Best AI mista
 
 ---
 
+## ⭐ Bonus findings (not planted, but real: +1 each)
+
+These were found by an AI test run. They are genuinely in the data.
+
+### B1. Menu prices never changed, so margins erode slowly
+- Menu prices are fixed for all 24 months, while ingredient costs drift up ~3% per year (some items 5–15%).
+- Copenhagen gross margin slips from **74.9% (2024) to 73.4% (2025)** with no shock at all. It's a slow squeeze that's easy to miss next to the ketchup crisis.
+- Business implication: a small price rise is an obvious lever.
+
+### B2. Currency translation flatters Warsaw
+- The zloty strengthened slightly (EUR/PLN averaged 4.43 in 2024 and 4.39 in 2025).
+- At constant 2024 rates, Warsaw's 2025 revenue would be about **€12.6k lower**. Part of the reported EUR growth is FX, not hot dogs.
+- A great one for a market risk team: separating operational performance from translation effects.
+
+## Known AI mistakes from test runs (material for "Ketchup on the Shirt")
+- **Sonnet:** blamed the Warsaw margin collapse on sausage instead of ketchup, despite the supplier data.
+- **Haiku:** told the CEO to consider closing W4. Its low margin is only because it traded during the ketchup shock.
+- **Third test run:** explained missing item rows as items "selling out". In fact a row simply doesn't exist when an item sold zero units that day (mostly the stadium stands on quiet days).
+- **Third test run:** quoted Warsaw growth of ~18–19% without noting that almost all of it comes from the new W4 stand (the new-stand trap).
+
 ## Smaller details (no points, but nice if spotted)
 - Storm days: uncovered stands are closed and there are no sales rows for them. The logbook says *"Storm warning - closed for the day."* AI may flag these as "missing data".
 - Card payment share drifts upwards slowly across all stands (+3 percentage points per year).
 - All stands grow ~2.5% per year underneath the noise.
+- Zero-sales rows are omitted: if an item sold nothing at a stand that day, there is no row (common at the stadium stands).
+- There is no recipe table: the link from `supplier_prices` to `cost_of_goods` has to be inferred.
 
 ## Regenerating the data
 `python generate_data.py` writes fresh CSVs to `../participant_pack/data`. The fixed seed gives identical data. Change `SEED` for a new variant, for example a different dataset for a second session.

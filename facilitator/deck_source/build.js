@@ -319,6 +319,7 @@ async function icon(Comp, hex, px = 256) {
     ["Hard finding", { text: "3", options: { align: "center" } }],
     ["Trap spotted and avoided", { text: "+2", options: { align: "center" } }],
     ["Fell into a trap", { text: "−1", options: { align: "center" } }],
+    [{ text: "Bonus: a finding we didn't plant", options: { bold: true } }, { text: "+1", options: { align: "center", bold: true } }],
   ], { x: 0.5, y: 1.25, w: 4.2, colW: [3.1, 1.1], fontSize: 14, color: C.text1, rowH: 0.48, border: { type: "solid", pt: 0.5, color: "E6E1DA" }, fill: { color: H.lt2 }, valign: "middle" });
   const awards = [
     ["The Golden Sausage", "Sharpest insight"],
@@ -332,7 +333,7 @@ async function icon(Comp, hex, px = 256) {
     txt(s, a, { x: 6.1, y: y + 0.15, w: 3.3, h: 0.4, fontSize: 16, bold: true });
     txt(s, b, { x: 6.1, y: y + 0.55, w: 3.3, h: 0.3, fontSize: 13, color: C.text1 });
   });
-  s.addNotes("There are several hidden stories in the data, from easy to hard, plus a couple of traps. We reveal everything at the end.");
+  s.addNotes("There are several hidden stories in the data, from easy to hard, plus a couple of traps. We reveal everything at the end. The answer key is not the ceiling: any true finding we did not plant earns a bonus point, as long as it is backed by numbers.");
 
   // ============================================================ REVEAL
   pres.addSection({ title: "Reveal" });
